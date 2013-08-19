@@ -18,6 +18,13 @@
 		4E1B66EC17BFF95900D47D39 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E1B66EB17BFF95900D47D39 /* Default@2x.png */; };
 		4E1B66EE17BFF95900D47D39 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E1B66ED17BFF95900D47D39 /* Default-568h@2x.png */; };
 		4E1B66F117BFF95900D47D39 /* World_Cities_Game.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B66EF17BFF95900D47D39 /* World_Cities_Game.xcdatamodeld */; };
+		4E1B66FA17BFF98300D47D39 /* WCGMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B66F817BFF98300D47D39 /* WCGMapViewController.m */; };
+		4E1B66FB17BFF98300D47D39 /* WCGMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E1B66F917BFF98300D47D39 /* WCGMapViewController.xib */; };
+		4E1B66FD17BFFA1600D47D39 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1B66FC17BFFA1600D47D39 /* MapKit.framework */; };
+		4E1B670017BFFB3400D47D39 /* WCGCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B66FF17BFFB3400D47D39 /* WCGCity.m */; };
+		4E1B670D17BFFCAF00D47D39 /* WCGRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B670C17BFFCAF00D47D39 /* WCGRegion.m */; };
+		4E1B671017C0010400D47D39 /* WCGCountry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B670F17C0010400D47D39 /* WCGCountry.m */; };
+		4E1B671217C0F6FA00D47D39 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1B671117C0F6FA00D47D39 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +43,17 @@
 		4E1B66EB17BFF95900D47D39 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		4E1B66ED17BFF95900D47D39 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4E1B66F017BFF95900D47D39 /* World_Cities_Game.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = World_Cities_Game.xcdatamodel; sourceTree = "<group>"; };
+		4E1B66F717BFF98300D47D39 /* WCGMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGMapViewController.h; sourceTree = "<group>"; };
+		4E1B66F817BFF98300D47D39 /* WCGMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGMapViewController.m; sourceTree = "<group>"; };
+		4E1B66F917BFF98300D47D39 /* WCGMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCGMapViewController.xib; sourceTree = "<group>"; };
+		4E1B66FC17BFFA1600D47D39 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		4E1B66FE17BFFB3400D47D39 /* WCGCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGCity.h; sourceTree = "<group>"; };
+		4E1B66FF17BFFB3400D47D39 /* WCGCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGCity.m; sourceTree = "<group>"; };
+		4E1B670B17BFFCAF00D47D39 /* WCGRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGRegion.h; sourceTree = "<group>"; };
+		4E1B670C17BFFCAF00D47D39 /* WCGRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGRegion.m; sourceTree = "<group>"; };
+		4E1B670E17C0010400D47D39 /* WCGCountry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGCountry.h; sourceTree = "<group>"; };
+		4E1B670F17C0010400D47D39 /* WCGCountry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGCountry.m; sourceTree = "<group>"; };
+		4E1B671117C0F6FA00D47D39 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E1B671217C0F6FA00D47D39 /* CoreLocation.framework in Frameworks */,
+				4E1B66FD17BFFA1600D47D39 /* MapKit.framework in Frameworks */,
 				4E1B66D617BFF95900D47D39 /* UIKit.framework in Frameworks */,
 				4E1B66D817BFF95900D47D39 /* Foundation.framework in Frameworks */,
 				4E1B66DA17BFF95900D47D39 /* CoreGraphics.framework in Frameworks */,
@@ -56,6 +76,8 @@
 		4E1B66C917BFF95900D47D39 = {
 			isa = PBXGroup;
 			children = (
+				4E1B671117C0F6FA00D47D39 /* CoreLocation.framework */,
+				4E1B66FC17BFFA1600D47D39 /* MapKit.framework */,
 				4E1B66DD17BFF95900D47D39 /* World Cities Game */,
 				4E1B66D417BFF95900D47D39 /* Frameworks */,
 				4E1B66D317BFF95900D47D39 /* Products */,
@@ -84,10 +106,13 @@
 		4E1B66DD17BFF95900D47D39 /* World Cities Game */ = {
 			isa = PBXGroup;
 			children = (
+				4E1B670717BFFB6A00D47D39 /* db */,
 				4E1B66E617BFF95900D47D39 /* WCGAppDelegate.h */,
 				4E1B66E717BFF95900D47D39 /* WCGAppDelegate.m */,
-				4E1B66EF17BFF95900D47D39 /* World_Cities_Game.xcdatamodeld */,
 				4E1B66DE17BFF95900D47D39 /* Supporting Files */,
+				4E1B66F717BFF98300D47D39 /* WCGMapViewController.h */,
+				4E1B66F817BFF98300D47D39 /* WCGMapViewController.m */,
+				4E1B66F917BFF98300D47D39 /* WCGMapViewController.xib */,
 			);
 			path = "World Cities Game";
 			sourceTree = "<group>";
@@ -104,6 +129,20 @@
 				4E1B66ED17BFF95900D47D39 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4E1B670717BFFB6A00D47D39 /* db */ = {
+			isa = PBXGroup;
+			children = (
+				4E1B66FE17BFFB3400D47D39 /* WCGCity.h */,
+				4E1B66FF17BFFB3400D47D39 /* WCGCity.m */,
+				4E1B66EF17BFF95900D47D39 /* World_Cities_Game.xcdatamodeld */,
+				4E1B670E17C0010400D47D39 /* WCGCountry.h */,
+				4E1B670F17C0010400D47D39 /* WCGCountry.m */,
+				4E1B670B17BFFCAF00D47D39 /* WCGRegion.h */,
+				4E1B670C17BFFCAF00D47D39 /* WCGRegion.m */,
+			);
+			name = db;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,6 +201,7 @@
 				4E1B66EA17BFF95900D47D39 /* Default.png in Resources */,
 				4E1B66EC17BFF95900D47D39 /* Default@2x.png in Resources */,
 				4E1B66EE17BFF95900D47D39 /* Default-568h@2x.png in Resources */,
+				4E1B66FB17BFF98300D47D39 /* WCGMapViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +215,10 @@
 				4E1B66E417BFF95900D47D39 /* main.m in Sources */,
 				4E1B66E817BFF95900D47D39 /* WCGAppDelegate.m in Sources */,
 				4E1B66F117BFF95900D47D39 /* World_Cities_Game.xcdatamodeld in Sources */,
+				4E1B66FA17BFF98300D47D39 /* WCGMapViewController.m in Sources */,
+				4E1B670017BFFB3400D47D39 /* WCGCity.m in Sources */,
+				4E1B670D17BFFCAF00D47D39 /* WCGRegion.m in Sources */,
+				4E1B671017C0010400D47D39 /* WCGCountry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 #import "WCGAppDelegate.h"
+#import "WCGMapViewController.h"
 
 @implementation WCGAppDelegate
 
@@ -18,6 +19,17 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    WCGMapViewController *mvc = [[WCGMapViewController alloc] init];
+    
+    UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:mvc];
+    
+    [[self window] setRootViewController:masterNav];
+
+    
+    
+    
+    
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
