@@ -43,8 +43,8 @@
         points = 0;
         currentCityIndex = -1;
         progressBarTotalSeconds = 0;
-        maxPointsNum = 0;
-        // used for parsing cities and countries 
+        
+        // used for parsing cities and countries
         /*[self parseAllCountries];
         [self showAllItems:@"WCGCountry"];
         [self parseAllCities];
@@ -271,12 +271,11 @@
 }
 
 
-//get some cities, set maxPointsNum (20000 km * num) and number of questions
+//get some cities, set number of questions
 - (void)getCities:(int)numberOfCities;
 {
     if (!numberOfCities) numberOfCities = 10;
     
-    maxPointsNum = 20000 * numberOfCities;
     
     numberOfQuestions = numberOfCities;
     
@@ -319,6 +318,7 @@
     currentCityIndex++;
     if (currentCityIndex == numberOfQuestions)
     {
+       // points = (maxPointsNum - points) / 10000;
         [questionField setText:[NSString stringWithFormat:@"Yay! Game completed! Total points: %d", points]];
     }
     else
@@ -353,17 +353,34 @@
     
     //show distance
     int distanceNumber = round(distance/1000);
-    points += distanceNumber;
+        
+    points = [self earnedPoints:distanceNumber] + points;
     
     [questionField setText:[NSString stringWithFormat:@"Distance: %d km.", distanceNumber]];
     
     [self setTimerFor:2.0 withSelector:@selector(nextQuestion)];
 }
 
+-(int)earnedPoints:(int)distanceNumber
+{
+    int earnedPoints = 0;
+    
+    if (distanceNumber < 25) earnedPoints = 3000;
+    else if (distanceNumber < 50) earnedPoints = 2000;
+    else if (distanceNumber < 100) earnedPoints = 1500;
+    else if (distanceNumber < 500) earnedPoints = 1000;
+    else if (distanceNumber < 1000) earnedPoints = 500;
+    else if (distanceNumber < 1500) earnedPoints = 250;
+    else if (distanceNumber < 2000) earnedPoints = 120;
+    else if (distanceNumber <= 3000) earnedPoints = 30;
+    
+    return earnedPoints;
+}
+
 -(void)questionFailed
 {
     [worldMap removeGestureRecognizer:tapRecognizer];
-
+    
     CLLocationCoordinate2D defaultCoordinate;    
     [questionField setText:@"Question failed"];
     [self showDesiredPoint:defaultCoordinate withLocation:nil];

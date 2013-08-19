@@ -38,7 +38,6 @@
     
     float progressBarTotalSeconds;
     
-    int maxPointsNum;
 }
 
 //preparations
