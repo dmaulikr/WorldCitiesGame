@@ -25,6 +25,7 @@
 		4E1B670D17BFFCAF00D47D39 /* WCGRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B670C17BFFCAF00D47D39 /* WCGRegion.m */; };
 		4E1B671017C0010400D47D39 /* WCGCountry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B670F17C0010400D47D39 /* WCGCountry.m */; };
 		4E1B671217C0F6FA00D47D39 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1B671117C0F6FA00D47D39 /* CoreLocation.framework */; };
+		4E1B671417C2A43900D47D39 /* store.wolrdcitiesgame in Resources */ = {isa = PBXBuildFile; fileRef = 4E1B671317C2A43900D47D39 /* store.wolrdcitiesgame */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		4E1B670E17C0010400D47D39 /* WCGCountry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGCountry.h; sourceTree = "<group>"; };
 		4E1B670F17C0010400D47D39 /* WCGCountry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGCountry.m; sourceTree = "<group>"; };
 		4E1B671117C0F6FA00D47D39 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4E1B671317C2A43900D47D39 /* store.wolrdcitiesgame */ = {isa = PBXFileReference; lastKnownFileType = file; path = store.wolrdcitiesgame; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 		4E1B66DE17BFF95900D47D39 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4E1B671317C2A43900D47D39 /* store.wolrdcitiesgame */,
 				4E1B66DF17BFF95900D47D39 /* World Cities Game-Info.plist */,
 				4E1B66E017BFF95900D47D39 /* InfoPlist.strings */,
 				4E1B66E317BFF95900D47D39 /* main.m */,
@@ -202,6 +205,7 @@
 				4E1B66EC17BFF95900D47D39 /* Default@2x.png in Resources */,
 				4E1B66EE17BFF95900D47D39 /* Default-568h@2x.png in Resources */,
 				4E1B66FB17BFF98300D47D39 /* WCGMapViewController.xib in Resources */,
+				4E1B671417C2A43900D47D39 /* store.wolrdcitiesgame in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

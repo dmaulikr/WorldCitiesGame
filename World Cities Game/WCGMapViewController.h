@@ -36,7 +36,9 @@
     NSInteger currentCityIndex;
     MKPointAnnotation *desiredPointAnnotation;
     
-    float progressBarTotalSeconds;       
+    float progressBarTotalSeconds;
+    
+    int maxPointsNum;
 }
 
 //preparations

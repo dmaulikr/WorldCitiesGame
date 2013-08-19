@@ -23,13 +23,7 @@
     
     UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:mvc];
     
-    [[self window] setRootViewController:masterNav];
-
-    
-    
-    
-    
-    
+    [[self window] setRootViewController:masterNav];    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;

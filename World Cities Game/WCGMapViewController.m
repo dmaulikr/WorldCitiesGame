@@ -43,6 +43,7 @@
         points = 0;
         currentCityIndex = -1;
         progressBarTotalSeconds = 0;
+        maxPointsNum = 0;
         // used for parsing cities and countries 
         /*[self parseAllCountries];
         [self showAllItems:@"WCGCountry"];
@@ -134,7 +135,22 @@
 {
     NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentDirectory = [documentDirectories objectAtIndex:0];
-    return [documentDirectory stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
+    NSError *error;
+    NSString * resultString = [documentDirectory stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL success = [fileManager fileExistsAtPath:resultString];
+    
+    if (!success)
+    {
+        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
+        success = [fileManager copyItemAtPath:defaultDBPath toPath:resultString error:&error];
+        if (!success) {
+            NSLog(@"Failed to create writable database file");
+        }
+    }
+    
+    return resultString;
 }
 
 - (void)viewDidLoad
@@ -254,9 +270,14 @@
     [progressBar setHidden:YES];
 }
 
+
+//get some cities, set maxPointsNum (20000 km * num) and number of questions
 - (void)getCities:(int)numberOfCities;
 {
     if (!numberOfCities) numberOfCities = 10;
+    
+    maxPointsNum = 20000 * numberOfCities;
+    
     numberOfQuestions = numberOfCities;
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -369,9 +390,6 @@
 
 }
 
-
-
-
 -(IBAction)tapOnMap:(UITapGestureRecognizer *)recognizer
 {
     if (currentCityIndex != -1)
@@ -411,6 +429,7 @@
     return annView;
     
 }
+
 
 
 
