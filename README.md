@@ -1,7 +1,6 @@
 world-cities-game
 =================
 v 0.1 19.08.2013
-=================
 
 This is a small geo game designed by me this weekend. 
 
@@ -25,4 +24,4 @@ Hi, my name is Alexandra and you can contact me via e-mail: ylibatsya@gmail.com
 License
 =================
 
-See LICENSE.txt for license.
+See license.txt for license.
