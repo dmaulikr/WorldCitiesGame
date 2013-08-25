@@ -8,6 +8,7 @@
 
 #import "WCGAppDelegate.h"
 #import "WCGMapViewController.h"
+#import "WCGStartViewController.h"
 
 @implementation WCGAppDelegate
 
@@ -21,7 +22,9 @@
     // Override point for customization after application launch.
     WCGMapViewController *mvc = [[WCGMapViewController alloc] init];
     
-    UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:mvc];
+    WCGStartViewController *svc = [[WCGStartViewController alloc] init];
+    
+    UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:svc];
     
     [[self window] setRootViewController:masterNav];    
     self.window.backgroundColor = [UIColor whiteColor];

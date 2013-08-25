@@ -365,6 +365,9 @@
 {
     int earnedPoints = 0;
     
+   
+    
+    
     if (distanceNumber < 25) earnedPoints = 3000;
     else if (distanceNumber < 50) earnedPoints = 2000;
     else if (distanceNumber < 100) earnedPoints = 1500;
