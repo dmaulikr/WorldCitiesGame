@@ -10,6 +10,7 @@
 #import "WCGMapViewController.h"
 #import "WCGTextViewController.h"
 #import "WCGBuyViewController.h"
+#import "WCGCountriesViewController.h"
 
 @interface WCGStartViewController ()
 
@@ -66,7 +67,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     int curRow = [indexPath row];
     if (curRow == 0) //play
     {
-        WCGMapViewController *currentViewController = [[WCGMapViewController alloc] init];
+       // WCGMapViewController *currentViewController = [[WCGMapViewController alloc] init];
+        WCGCountriesViewController *currentViewController = [[WCGCountriesViewController alloc] init];
+        
+        
         [[self navigationController] pushViewController:currentViewController
                                                animated:YES];
 

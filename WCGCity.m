@@ -2,7 +2,7 @@
 //  WCGCity.m
 //  World Cities Game
 //
-//  Created by Alexandra Pozdnyakova on 17/08/2013.
+//  Created by Alexandra Pozdnyakova on 25/08/2013.
 //  Copyright (c) 2013 Alexandra Pozdnyakova. All rights reserved.
 //
 
@@ -12,11 +12,11 @@
 
 @implementation WCGCity
 
-@dynamic name;
+@dynamic capital;
 @dynamic lat;
 @dynamic lng;
+@dynamic name;
 @dynamic population;
-@dynamic capital;
 @dynamic country;
 
 -(void)addName:(NSString*)cityName countyCode:(WCGCountry*)country population:(NSNumber*)population lat:(NSString*)lat lng:(NSString*)lng isCapital:(BOOL)isCapital
@@ -44,5 +44,6 @@
 {
     return [[self lng] doubleValue];
 }
+
 
 @end

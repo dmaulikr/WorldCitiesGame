@@ -11,6 +11,7 @@
 #import "WCGCountry.h"
 #import "WCGRegion.h"
 #include <math.h>
+#import "WCGWorldStore.h"
 
 @interface WCGMapViewController ()
 
@@ -22,33 +23,37 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        model = [NSManagedObjectModel mergedModelFromBundles:nil];
-        NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-        
-        NSString *path = [self itemArchivePath];
-        NSURL *storeURL = [NSURL fileURLWithPath:path];
-        
-        NSError *error = nil;
-        
-        if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
-        {
-            [NSException raise:@"open failed" format:@"reason: %@", [error localizedDescription]];
-        }
-        
-        context = [[NSManagedObjectContext alloc] init];
-        [context setPersistentStoreCoordinator:psc];
-        
-        [context setUndoManager:nil];
-        
+               
         points = 0;
         currentCityIndex = -1;
         progressBarTotalSeconds = 0;
         
+        
+
         // used for parsing cities and countries
-        /*[self parseAllCountries];
-        [self showAllItems:@"WCGCountry"];
-        [self parseAllCities];
-        [self saveChanges];*/
+        /*
+        [[WCGWorldStore sharedStore] addDefaultRegions];
+        [[WCGWorldStore sharedStore] parseAllCountries];
+        [[WCGWorldStore sharedStore] showAllItems:@"WCGRegion"];
+        [[WCGWorldStore sharedStore] parseAllRegions];
+        [[WCGWorldStore sharedStore] showAllItems:@"WCGCountry"];
+        [[WCGWorldStore sharedStore] parseAllCities];               
+        [[WCGWorldStore sharedStore] saveChanges];
+         */
+        
+    }
+    return self;
+}
+
+-(id)initWithParams:(NSDictionary*)params
+{
+    self = [super initWithNibName:@"WCGMapViewController" bundle:nil];
+    if (self) {
+               
+        points = 0;
+        currentCityIndex = -1;
+        progressBarTotalSeconds = 0;
+        gameType = [[NSMutableDictionary alloc] initWithDictionary:params];
     }
     return self;
 }
@@ -59,114 +64,44 @@
     return YES;
 }
 
-// used for parsing cities and countries 
-/*
--(void)addCity:(NSString*)newCityName
-{
-    WCGCity *newCity = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCity" inManagedObjectContext:context];
-    [newCity setName:newCityName];
-}
-
--(void)addCity:(NSString*)newCityName countyCode:(WCGCountry*)country population:(NSString*)population lat:(NSString*)lat lng:(NSString*)lng isCapital:(BOOL)isCapital
-{
-    WCGCity *newCity = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCity" inManagedObjectContext:context];
-    [newCity addName:newCityName countyCode:country population:population lat:lat lng:lng isCapital:isCapital];
-}
-
--(void)addCountry:(NSString*)countryName countryCode:(NSString*)countryCode region:(WCGRegion*)region
-{
-    countryName = [countryName stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-    WCGCountry * newCountry = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCountry" inManagedObjectContext:context];
-    [newCountry addName:countryName countryCode:countryCode region:region];
-    
-}
-
--(void)addRegion:(NSString*)regionName code:(NSString*)code
-{
-    WCGRegion *newRegion = [NSEntityDescription insertNewObjectForEntityForName:@"WCGRegion" inManagedObjectContext:context];
-    [newRegion addName:regionName code:code];
-}
-
-
--(void)parseAllCountries
-{
-    NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/geodata/countries.txt"];
-    NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
-    for (NSString * line in lines)
-    {
-        if ([line isEqualToString:@""]) continue;
-        NSArray *countriesArr = [line componentsSeparatedByString:@"\t"];
-        if (![[countriesArr objectAtIndex:2] isEqualToString:@"TLD"])
-        {
-            NSLog(@"county name: %@, country code: %@", [countriesArr objectAtIndex:3], [[countriesArr objectAtIndex:1] lowercaseString]);
-            [self addCountry:[countriesArr objectAtIndex:3] countryCode:[[countriesArr objectAtIndex:1] lowercaseString] region:nil];
-        }
-    }
-    
-}
-
--(void)parseAllCities
-{
-    NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/cities1000.txt"];
-    NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
-    int i = 0;
-    for (NSString * line in lines)
-    {
-        i++;
-        if ([line isEqualToString:@""]) continue;
-        NSArray *citiesArr = [line componentsSeparatedByString:@"\t"];
-        
-        
-        NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
-        NSNumber * populationNumber = [f numberFromString:[citiesArr objectAtIndex:14]];
-        
-        
-        
-        [self addCity:[citiesArr objectAtIndex:2] countyCode:[allCountries objectForKey:[[citiesArr objectAtIndex:8] lowercaseString]] population:populationNumber  lat:[citiesArr objectAtIndex:4] lng:[citiesArr objectAtIndex:5] isCapital:NO];
-        
-    }
-    NSLog(@"Total count: %d", i);
-    
-}
-*/
-
-
--(NSString *)itemArchivePath
-{
-    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory = [documentDirectories objectAtIndex:0];
-    NSError *error;
-    NSString * resultString = [documentDirectory stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL success = [fileManager fileExistsAtPath:resultString];
-    
-    if (!success)
-    {
-        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
-        success = [fileManager copyItemAtPath:defaultDBPath toPath:resultString error:&error];
-        if (!success) {
-            NSLog(@"Failed to create writable database file");
-        }
-    }
-    
-    return resultString;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnMap:)];    
-    tapRecognizer.numberOfTapsRequired = 1;    
-    tapRecognizer.numberOfTouchesRequired = 1;
+    //[questionField setText:@"The game will start in a moment..."];
+    //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(preparations) userInfo:nil repeats:NO];
+    [self preparations];
     
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([worldMap centerCoordinate], 10000000, 10000000);
-    [worldMap setRegion:region animated:YES];
+}
 
-    desiredPointAnnotation = [[MKPointAnnotation alloc] init];    
+-(void)preparations
+{
+    tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnMap:)];
+    tapRecognizer.numberOfTapsRequired = 1;
+    tapRecognizer.numberOfTouchesRequired = 1;
+    CLLocationCoordinate2D centre;
+    int x, y;
+    
+    if ([gameType objectForKey:@"type"] && [[gameType objectForKey:@"type"] isEqualToString:@"region"])
+    {
+        NSString *regionStr = [gameType objectForKey:@"details"];
+        centre = CLLocationCoordinate2DMake([[[allRegions objectForKey:regionStr] centreLat] intValue], [[[allRegions objectForKey:regionStr] centreLng] intValue]);
+        x = [[[allRegions objectForKey:regionStr] zoomX] intValue];
+        y = [[[allRegions objectForKey:regionStr] zoomY] intValue];
+    }
+    else
+    {
+        centre = [worldMap centerCoordinate];
+        x = y = 1000000;
+    }
+           
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(centre, 5000000, 5000000);
+    [worldMap setRegion:region animated:YES];
+    
+    desiredPointAnnotation = [[MKPointAnnotation alloc] init];
     
     [progressBar setProgress:0.0];
-
+    
     [self startGame];
 
 }
@@ -177,46 +112,8 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)showAllItems:(NSString*)tableName
-{
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *e = [[model entitiesByName] objectForKey:tableName];
-    [request setEntity:e];
-    
-    NSError *error;
-    
-    NSArray *result = [context executeFetchRequest:request error:&error];
-    
-    if (!result)
-    {
-        [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
-    }
-    
-    NSMutableArray *allItems = [[NSMutableArray alloc] initWithArray:result];
-       
-    
-    allCountries = [[NSMutableDictionary alloc] init];
-    
-    for (WCGCountry *country in allItems)
-    {
-        //NSLog(@"name: %@. code: %@ ", [country name], [country code]);
-        [allCountries setValue:country forKey:[country code]];
-    }
-    
-}
 
--(BOOL)saveChanges
-{
-    NSError *err = nil;
-    BOOL successful = [context save:&err];
-    if (!successful)
-    {
-        NSLog(@"error saving %@", [err localizedDescription]);
-    }
-    return successful;
-    
-}
+
 
 //this checks if city exists - used for tests
 /*
@@ -271,43 +168,16 @@
 }
 
 
-//get some cities, set number of questions
-- (void)getCities:(int)numberOfCities;
-{
-    if (!numberOfCities) numberOfCities = 10;
-    
-    
-    numberOfQuestions = numberOfCities;
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
-    NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGCity"];
-    [request setEntity:e];
-    
-    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"population" ascending:NO];
-    [request setSortDescriptors:[NSArray arrayWithObject:sd]];
-    
-    [request setFetchLimit:numberOfCities];
-        
-    NSError *error;
-    
-    NSArray *result = [context executeFetchRequest:request error:&error];
-    
-    if (!result)
-    {
-        [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
-    }
-    
-    currentCities = [[NSMutableArray alloc] initWithArray:result];
-    for (WCGCity *city in currentCities)
-    {
-        NSLog(@"city exists: %@, lat %@, lng %@, population %@", [city name], [city lat], [city lng], [city population]);
-    }
-}
 
 -(void)startGame
 {
-    [self getCities:10];
+    numberOfQuestions = [[gameType objectForKey:@"count"] intValue];
+    if (!numberOfQuestions) numberOfQuestions = 10;
+    
+    currentCities = [[WCGWorldStore sharedStore] getCitiesWithParams:gameType];
+    
+   
+        
     [self nextQuestion];
     
 }
@@ -323,7 +193,7 @@
     }
     else
     {
-        [questionField setText:[[currentCities objectAtIndex:currentCityIndex] name]];
+        [questionField setText:[NSString stringWithFormat:@"%d/%d %@", currentCityIndex + 1, numberOfQuestions, [[currentCities objectAtIndex:currentCityIndex] name]]];
         [self setNewProgressBar:10.0];
         [worldMap addGestureRecognizer:tapRecognizer];
     } 
@@ -363,11 +233,7 @@
 
 -(int)earnedPoints:(int)distanceNumber
 {
-    int earnedPoints = 0;
-    
-   
-    
-    
+    int earnedPoints = 0;    
     if (distanceNumber < 25) earnedPoints = 3000;
     else if (distanceNumber < 50) earnedPoints = 2000;
     else if (distanceNumber < 100) earnedPoints = 1500;

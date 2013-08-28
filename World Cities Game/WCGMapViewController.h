@@ -13,22 +13,20 @@
 @class WCGRegion;
 
 
+
 @interface WCGMapViewController : UIViewController <UITextFieldDelegate, MKMapViewDelegate>
-{
-    
+{    
     __weak IBOutlet MKMapView *worldMap;
     __weak IBOutlet UILabel *questionField;
     __weak IBOutlet UIProgressView *progressBar;
     UITapGestureRecognizer *tapRecognizer;
 
-    NSManagedObjectContext *context;
-    NSManagedObjectModel *model;
-    
     NSMutableDictionary *allCountries;
+    NSMutableDictionary *allRegions;
     
     CLLocationManager *locationManager;
     
-    NSArray *currentCities;
+    NSMutableArray *currentCities;
     
     int points;
     int numberOfQuestions;
@@ -38,12 +36,12 @@
     
     float progressBarTotalSeconds;
     
+    NSMutableDictionary *gameType;
+    
+
 }
 
 //preparations
-- (void)showAllItems:(NSString*)tableName;
-- (void)getCities:(int)numberOfCities;
-- (BOOL)saveChanges;
 - (IBAction)tapOnMap:(UITapGestureRecognizer *)recognizer;
 
 //game
@@ -60,20 +58,9 @@
 //show current city pin (desiredLocation is nil) or use params
 - (void)showDesiredPoint:(CLLocationCoordinate2D)currentCityCoordinate withLocation:(CLLocation*)desiredLocation;
 
-
-// used for parsing cities and countries 
-/*
--(void)parseAllCountries;
--(void)parseAllCities;
--(void)addCity:(NSString*)cityName;
--(void)addCity:(NSString*)cityName countyCode:(WCGCountry*)country population:(NSString*)population lat:(NSString*)lat lng:(NSString*)lng isCapital:(BOOL)isCapital;
--(void)addCountry:(NSString*)countryName countryCode:(NSString*)countryCode region:(WCGRegion*)region;
--(void)addRegion:(NSString*)regionName code:(NSString*)code;
-*/
-
 //this checks if city exists - used for tests
 //-(void)checkCity;
-- (NSString *)itemArchivePath;
 
+-(id)initWithParams:(NSDictionary*)params;
 
 @end

@@ -2,7 +2,7 @@
 //  WCGCountry.m
 //  World Cities Game
 //
-//  Created by Alexandra Pozdnyakova on 17/08/2013.
+//  Created by Alexandra Pozdnyakova on 25/08/2013.
 //  Copyright (c) 2013 Alexandra Pozdnyakova. All rights reserved.
 //
 
@@ -13,8 +13,8 @@
 
 @implementation WCGCountry
 
-@dynamic name;
 @dynamic code;
+@dynamic name;
 @dynamic cities;
 @dynamic region;
 
@@ -29,6 +29,12 @@
     }
     
     
+}
+
+
+-(void)addWorldRegion:(WCGRegion*)region
+{
+    self.region = region;
 }
 
 
