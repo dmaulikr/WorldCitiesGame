@@ -7,10 +7,14 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="population" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="country" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="WCGCountry" inverseName="cities" inverseEntity="WCGCountry" syncable="YES"/>
+        <relationship name="countryCapital" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="WCGCountry" inverseName="capital" inverseEntity="WCGCountry" syncable="YES"/>
     </entity>
     <entity name="WCGCountry" representedClassName="WCGCountry" syncable="YES">
+        <attribute name="centreLat" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="centreLng" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="code" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="capital" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="WCGCity" inverseName="countryCapital" inverseEntity="WCGCity" syncable="YES"/>
         <relationship name="cities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WCGCity" inverseName="country" inverseEntity="WCGCity" syncable="YES"/>
         <relationship name="region" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WCGRegion" inverseName="countries" inverseEntity="WCGRegion" syncable="YES"/>
     </entity>
@@ -24,8 +28,8 @@
         <relationship name="countries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WCGCountry" inverseName="region" inverseEntity="WCGCountry" syncable="YES"/>
     </entity>
     <elements>
-        <element name="WCGCity" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="WCGCountry" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="WCGCity" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="WCGCountry" positionX="160" positionY="192" width="128" height="150"/>
         <element name="WCGRegion" positionX="160" positionY="192" width="128" height="150"/>
     </elements>
 </model>

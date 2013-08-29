@@ -36,12 +36,12 @@
 		4EF120C617CE154C007B651D /* WCGScoresViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF120C417CE154C007B651D /* WCGScoresViewController.xib */; };
 		4EF120D017CE183F007B651D /* WCGCountriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF120CE17CE183F007B651D /* WCGCountriesViewController.m */; };
 		4EF120D117CE183F007B651D /* WCGCountriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF120CF17CE183F007B651D /* WCGCountriesViewController.xib */; };
+		4EF120E417CF542D007B651D /* WCGCountry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF120E317CF542C007B651D /* WCGCountry.m */; };
+		4EF120E717CF5456007B651D /* WCGCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF120E617CF5456007B651D /* WCGCity.m */; };
 		4EF7B4AB17CA586D007A6A0C /* WCGBuyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF7B4A917CA586D007A6A0C /* WCGBuyViewController.m */; };
 		4EF7B4AC17CA586D007A6A0C /* WCGBuyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF7B4AA17CA586D007A6A0C /* WCGBuyViewController.xib */; };
 		4EF7B4B517CA5896007A6A0C /* WCGTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF7B4B317CA5895007A6A0C /* WCGTextViewController.m */; };
 		4EF7B4B617CA5896007A6A0C /* WCGTextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF7B4B417CA5896007A6A0C /* WCGTextViewController.xib */; };
-		4EF7B4BF17CA7867007A6A0C /* WCGCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF7B4BE17CA7867007A6A0C /* WCGCity.m */; };
-		4EF7B4C217CA788C007A6A0C /* WCGCountry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF7B4C117CA788C007A6A0C /* WCGCountry.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,16 +87,16 @@
 		4EF120CD17CE183F007B651D /* WCGCountriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGCountriesViewController.h; sourceTree = "<group>"; };
 		4EF120CE17CE183F007B651D /* WCGCountriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGCountriesViewController.m; sourceTree = "<group>"; };
 		4EF120CF17CE183F007B651D /* WCGCountriesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCGCountriesViewController.xib; sourceTree = "<group>"; };
+		4EF120E217CF542C007B651D /* WCGCountry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCGCountry.h; path = db/WCGCountry.h; sourceTree = "<group>"; };
+		4EF120E317CF542C007B651D /* WCGCountry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCGCountry.m; path = db/WCGCountry.m; sourceTree = "<group>"; };
+		4EF120E517CF5456007B651D /* WCGCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCGCity.h; path = db/WCGCity.h; sourceTree = "<group>"; };
+		4EF120E617CF5456007B651D /* WCGCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCGCity.m; path = db/WCGCity.m; sourceTree = "<group>"; };
 		4EF7B4A817CA586D007A6A0C /* WCGBuyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGBuyViewController.h; sourceTree = "<group>"; };
 		4EF7B4A917CA586D007A6A0C /* WCGBuyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGBuyViewController.m; sourceTree = "<group>"; };
 		4EF7B4AA17CA586D007A6A0C /* WCGBuyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCGBuyViewController.xib; sourceTree = "<group>"; };
 		4EF7B4B217CA5895007A6A0C /* WCGTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGTextViewController.h; sourceTree = "<group>"; };
 		4EF7B4B317CA5895007A6A0C /* WCGTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGTextViewController.m; sourceTree = "<group>"; };
 		4EF7B4B417CA5896007A6A0C /* WCGTextViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WCGTextViewController.xib; sourceTree = "<group>"; };
-		4EF7B4BD17CA7867007A6A0C /* WCGCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WCGCity.h; path = ../WCGCity.h; sourceTree = "<group>"; };
-		4EF7B4BE17CA7867007A6A0C /* WCGCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WCGCity.m; path = ../WCGCity.m; sourceTree = "<group>"; };
-		4EF7B4C017CA788C007A6A0C /* WCGCountry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCGCountry.h; sourceTree = "<group>"; };
-		4EF7B4C117CA788C007A6A0C /* WCGCountry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WCGCountry.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,17 +183,17 @@
 		4E1B670717BFFB6A00D47D39 /* db */ = {
 			isa = PBXGroup;
 			children = (
-				4EF7B4BD17CA7867007A6A0C /* WCGCity.h */,
-				4EF7B4BE17CA7867007A6A0C /* WCGCity.m */,
 				4E1B66EF17BFF95900D47D39 /* World_Cities_Game.xcdatamodeld */,
+				4EF120E517CF5456007B651D /* WCGCity.h */,
+				4EF120E617CF5456007B651D /* WCGCity.m */,
 				4EF120B017CDC7DB007B651D /* WCGRegion.h */,
 				4EF120B117CDC7DB007B651D /* WCGRegion.m */,
-				4EF7B4C017CA788C007A6A0C /* WCGCountry.h */,
-				4EF7B4C117CA788C007A6A0C /* WCGCountry.m */,
 				4EF120AD17CCBE13007B651D /* WCGWorldStore.h */,
 				4EF120AE17CCBE13007B651D /* WCGWorldStore.m */,
 				4EF120BE17CE00D0007B651D /* WCGSettings.h */,
 				4EF120BF17CE00D0007B651D /* WCGSettings.m */,
+				4EF120E217CF542C007B651D /* WCGCountry.h */,
+				4EF120E317CF542C007B651D /* WCGCountry.m */,
 			);
 			name = db;
 			sourceTree = "<group>";
@@ -360,8 +360,6 @@
 				4EA4D07417C7E78F002C197A /* WCGStartViewController.m in Sources */,
 				4EF7B4AB17CA586D007A6A0C /* WCGBuyViewController.m in Sources */,
 				4EF7B4B517CA5896007A6A0C /* WCGTextViewController.m in Sources */,
-				4EF7B4BF17CA7867007A6A0C /* WCGCity.m in Sources */,
-				4EF7B4C217CA788C007A6A0C /* WCGCountry.m in Sources */,
 				4EF120AB17CBE073007B651D /* WCGRegionsViewController.m in Sources */,
 				4EF120AF17CCBE13007B651D /* WCGWorldStore.m in Sources */,
 				4EF120B217CDC7DB007B651D /* WCGRegion.m in Sources */,
@@ -369,6 +367,8 @@
 				4EF120C017CE00D0007B651D /* WCGSettings.m in Sources */,
 				4EF120C517CE154C007B651D /* WCGScoresViewController.m in Sources */,
 				4EF120D017CE183F007B651D /* WCGCountriesViewController.m in Sources */,
+				4EF120E417CF542D007B651D /* WCGCountry.m in Sources */,
+				4EF120E717CF5456007B651D /* WCGCity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

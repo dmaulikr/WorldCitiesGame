@@ -55,6 +55,7 @@ struct zoom
  -(void)addCity:(NSString*)cityName countyCode:(WCGCountry*)country population:(NSString*)population lat:(NSString*)lat lng:(NSString*)lng isCapital:(BOOL)isCapital;
  -(void)addCountry:(NSString*)countryName countryCode:(NSString*)countryCode region:(WCGRegion*)region;
 -(void)addRegion:(NSString*)regionName code:(NSString*)code centreLat:(NSString*)lat centreLng:(NSString*)lng zoomX:(NSNumber*)zoomX zoomY:(NSNumber*)zoomY;
- 
+- (void)parseFullCountryInfo;
+
 
 @end

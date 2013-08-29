@@ -157,7 +157,7 @@
     NSString * resultString = [documentDirectory stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
     
     
-    
+    /*
      NSFileManager *fileManager = [NSFileManager defaultManager];
      BOOL success = [fileManager fileExistsAtPath:resultString];
      
@@ -171,7 +171,7 @@
          }
      }
      
-    
+    */
     
     return resultString;
 }
@@ -277,7 +277,7 @@
         {
             WCGRegion *reg = [country region];
             NSLog(@"%@", [reg name]);
-            NSLog(@"name: %@. code: %@, region: %@  ", [country name], [country code], [reg name]);
+            NSLog(@"name: %@. lat: %@, lng: %@ , capital: %@ ", [country name], [country centreLat], [country centreLng], [[country capital] name]);
             [allCountries setValue:country forKey:[country code]];
         }
     }
@@ -297,127 +297,227 @@
 // used for parsing cities and countries
 
  
- -(void)setRegion:(WCGRegion*)region toCountry:(NSString*)countryCode
- {
- NSFetchRequest *request = [[NSFetchRequest alloc] init];
- 
- NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGCountry"];
- [request setEntity:e];
- 
- NSPredicate *pred = [NSPredicate predicateWithFormat:@"code == %@", countryCode];
- 
- [request setPredicate:pred];
- 
- NSError *error;
- 
- NSArray *result = [context executeFetchRequest:request error:&error];
- 
- if (!result)
- {
- [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
- }
- 
- currentCities = [[NSMutableArray alloc] initWithArray:result];
- if ([currentCities count] > 0)
- {
- WCGCountry *newCountry = [currentCities objectAtIndex:0];
- NSLog(@"%@, region: %@",[newCountry name], [region name]);
- [newCountry addWorldRegion:region];
- [self saveChanges];
- }
- 
- }
+-(void)setRegion:(WCGRegion*)region toCountry:(NSString*)countryCode
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGCountry"];
+    [request setEntity:e];
+    
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"code == %@", countryCode];
+    
+    [request setPredicate:pred];
+    
+    NSError *error;
+    
+    NSArray *result = [context executeFetchRequest:request error:&error];
+    
+    if (!result)
+    {
+        [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
+    }
+    
+    currentCities = [[NSMutableArray alloc] initWithArray:result];
+    if ([currentCities count] > 0)
+    {
+        WCGCountry *newCountry = [currentCities objectAtIndex:0];
+        NSLog(@"%@, region: %@",[newCountry name], [region name]);
+        [newCountry addWorldRegion:region];
+        [self saveChanges];
+    }
+    
+}
 
- 
- -(void)addCity:(NSString*)newCityName
- {
- WCGCity *newCity = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCity" inManagedObjectContext:context];
- [newCity setName:newCityName];
- }
- 
- -(void)addCity:(NSString*)newCityName countyCode:(WCGCountry*)country population:(NSString*)population lat:(NSString*)lat lng:(NSString*)lng isCapital:(BOOL)isCapital
- {
- WCGCity *newCity = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCity" inManagedObjectContext:context];
- [newCity addName:newCityName countyCode:country population:population lat:lat lng:lng isCapital:isCapital];
- }
- 
- -(void)addCountry:(NSString*)countryName countryCode:(NSString*)countryCode region:(WCGRegion*)region
- {
- countryName = [countryName stringByReplacingOccurrencesOfString:@"\r" withString:@""];
- WCGCountry * newCountry = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCountry" inManagedObjectContext:context];
- [newCountry addName:countryName countryCode:countryCode region:region];
- 
- }
- 
+
+-(void)addCity:(NSString*)newCityName
+{
+    WCGCity *newCity = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCity" inManagedObjectContext:context];
+    [newCity setName:newCityName];
+}
+
+-(void)addCity:(NSString*)newCityName countyCode:(WCGCountry*)country population:(NSString*)population lat:(NSString*)lat lng:(NSString*)lng isCapital:(BOOL)isCapital
+{
+    WCGCity *newCity = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCity" inManagedObjectContext:context];
+    [newCity addName:newCityName countyCode:country population:[NSNumber numberWithInt:[population intValue]] lat:lat lng:lng isCapital:isCapital];
+   // [newCity addName:newCityName countyCode:country population:population lat:lat lng:lng isCapital:isCapital];
+}
+
+-(void)addCountry:(NSString*)countryName countryCode:(NSString*)countryCode region:(WCGRegion*)region
+{
+    countryName = [countryName stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    WCGCountry * newCountry = [NSEntityDescription insertNewObjectForEntityForName:@"WCGCountry" inManagedObjectContext:context];
+    [newCountry addName:countryName countryCode:countryCode region:region];
+    
+}
+
 -(void)addRegion:(NSString*)regionName code:(NSString*)code centreLat:(NSString*)lat centreLng:(NSString*)lng zoomX:(NSNumber*)zoomX zoomY:(NSNumber*)zoomY
- {
- WCGRegion *newRegion = [NSEntityDescription insertNewObjectForEntityForName:@"WCGRegion" inManagedObjectContext:context];
- [newRegion addName:regionName code:code centreLat:lat centreLng:lng zoomX:zoomX zoomY:zoomY];
- }
+{
+    WCGRegion *newRegion = [NSEntityDescription insertNewObjectForEntityForName:@"WCGRegion" inManagedObjectContext:context];
+    [newRegion addName:regionName code:code centreLat:lat centreLng:lng zoomX:zoomX zoomY:zoomY];
+}
  
- -(void)parseAllRegions
- {
- NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/countries_regions.txt"];
- NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
- for (NSString * line in lines)
- {
- if ([line isEqualToString:@""]) continue;
- NSArray *countriesArr = [line componentsSeparatedByString:@" "];
- 
- NSString * countryStr = [[countriesArr objectAtIndex:1] lowercaseString];
- NSString * regionStr = [countriesArr objectAtIndex:0];
- 
- [self setRegion:[allRegions objectForKey:regionStr] toCountry:countryStr];
- 
- 
- }
- 
-
- 
- 
- }
+-(void)parseAllRegions
+{
+    NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/countries_regions.txt"];
+    NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
+    for (NSString * line in lines)
+    {
+        if ([line isEqualToString:@""]) continue;
+        NSArray *countriesArr = [line componentsSeparatedByString:@" "];
+        
+        NSString * countryStr = [[countriesArr objectAtIndex:1] lowercaseString];
+        NSString * regionStr = [countriesArr objectAtIndex:0];
+        
+        [self setRegion:[allRegions objectForKey:regionStr] toCountry:countryStr];
+        
+        
+    }
+}
  
  -(void)parseAllCountries
  {
- NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/geodata/countries.txt"];
- NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
- for (NSString * line in lines)
- {
- if ([line isEqualToString:@""]) continue;
- NSArray *countriesArr = [line componentsSeparatedByString:@"\t"];
- if (![[countriesArr objectAtIndex:2] isEqualToString:@"TLD"])
- {
- NSLog(@"county name: %@, country code: %@", [countriesArr objectAtIndex:3], [[countriesArr objectAtIndex:1] lowercaseString]);
- [self addCountry:[countriesArr objectAtIndex:3] countryCode:[[countriesArr objectAtIndex:1] lowercaseString] region:nil];
- }
- }
- 
+     NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/geodata/countries.txt"];
+     NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
+     for (NSString * line in lines)
+     {
+         if ([line isEqualToString:@""]) continue;
+         NSArray *countriesArr = [line componentsSeparatedByString:@"\t"];
+         if (![[countriesArr objectAtIndex:2] isEqualToString:@"TLD"])
+         {
+             NSLog(@"county name: %@, country code: %@", [countriesArr objectAtIndex:3], [[countriesArr objectAtIndex:1] lowercaseString]);
+             [self addCountry:[countriesArr objectAtIndex:3] countryCode:[[countriesArr objectAtIndex:1] lowercaseString] region:nil];
+         }
+     }
+     
  }
  
  -(void)parseAllCities
  {
- NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/cities1000.txt"];
- NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
- int i = 0;
- for (NSString * line in lines)
- {
- i++;
- if ([line isEqualToString:@""]) continue;
- NSArray *citiesArr = [line componentsSeparatedByString:@"\t"];
- 
- 
- NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
- NSNumber * populationNumber = [f numberFromString:[citiesArr objectAtIndex:14]];
- 
- 
- 
- [self addCity:[citiesArr objectAtIndex:2] countyCode:[allCountries objectForKey:[[citiesArr objectAtIndex:8] lowercaseString]] population:populationNumber  lat:[citiesArr objectAtIndex:4] lng:[citiesArr objectAtIndex:5] isCapital:NO];
+     NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/cities1000.txt"];
+     NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
+     int i = 0;
+     for (NSString * line in lines)
+     {
+         i++;
+         if ([line isEqualToString:@""]) continue;
+         NSArray *citiesArr = [line componentsSeparatedByString:@"\t"];
+         
+         
+         NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+         NSNumber * populationNumber = [f numberFromString:[citiesArr objectAtIndex:14]];
+         
+         
+         
+         [self addCity:[citiesArr objectAtIndex:2] countyCode:[allCountries objectForKey:[[citiesArr objectAtIndex:8] lowercaseString]] population:populationNumber  lat:[citiesArr objectAtIndex:4] lng:[citiesArr objectAtIndex:5] isCapital:NO];
+         
+     }
+     NSLog(@"Total count: %d", i);
  
  }
- NSLog(@"Total count: %d", i);
- 
- }
- 
 
+-setCountryCapital:(WCGCity *)city toCountry:(NSString*)countryCode lat:(NSString*)lat lng:(NSString*)lng
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGCountry"];
+    [request setEntity:e];
+    
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"code == %@", countryCode];
+    
+    [request setPredicate:pred];
+    
+    NSError *error;
+    
+    NSArray *result = [context executeFetchRequest:request error:&error];
+    
+    if (!result)
+    {
+        [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
+    }
+    
+    currentCities = [[NSMutableArray alloc] initWithArray:result];
+    if ([currentCities count] > 0)
+    {
+        WCGCountry *newCountry = [currentCities objectAtIndex:0];
+        [newCountry setCountryCapital:city lat:lat lng:lng];
+        [self saveChanges];
+    }
+
+    
+}
+ 
+- (void)parseFullCountryInfo
+{
+    NSString *fileContents = [NSString stringWithContentsOfFile:@"/Users/alexandrapozdnyakova/Desktop/cow.txt"];
+    NSArray *lines = [fileContents componentsSeparatedByString:@"\n"];
+    for (NSString * line in lines)
+    {
+        if ([line length] < 1 || [line characterAtIndex:0] == '#' || [line characterAtIndex:0] == ' ' || [line isEqualToString:@""]) continue;
+        
+        NSArray *countriesArr = [line componentsSeparatedByString:@";"];
+        if ([countriesArr count] < 10) continue;
+        if ([[countriesArr objectAtIndex:35] intValue] != 1) continue;
+        
+        WCGCity * capital = [self checkCity:[countriesArr objectAtIndex:36]];
+        if (capital)
+        {
+            [self setCountryCapital:capital toCountry:[[countriesArr objectAtIndex:0] lowercaseString] lat:[countriesArr objectAtIndex:61] lng:[countriesArr objectAtIndex:62]];
+        }
+        
+        
+        //lat - 61, lng - 62
+        //hasCapital - 35, capital Name - 36
+        
+        
+        
+      /*  int i = 0;
+        for (NSString *element in countriesArr)
+            NSLog(@"%d: %@ ",i++,element);
+       */
+       
+               
+        //NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+       // NSNumber * populationNumber = [f numberFromString:[citiesArr objectAtIndex:14]];
+        
+        
+        
+       // [self addCity:[citiesArr objectAtIndex:2] countyCode:[allCountries objectForKey:[[citiesArr objectAtIndex:8] lowercaseString]] population:populationNumber  lat:[citiesArr objectAtIndex:4] lng:[citiesArr objectAtIndex:5] isCapital:NO];
+        
+    }
+    
+}
+
+//this checks if city exists - used for tests
+
+-(WCGCity*)checkCity:(NSString*)curCityName
+{
+   
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGCity"];
+    [request setEntity:e];
+    
+   // NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"population" ascending:NO];
+    //[request setSortDescriptors:[NSArray arrayWithObject:sd]];
+    
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"name == %@", curCityName];
+    [request setPredicate:pred];
+    [request setFetchLimit:1];
+
+    
+    NSError *error;
+    
+    NSArray *result = [context executeFetchRequest:request error:&error];
+    
+    if (!result)
+    {
+        [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
+    }
+    
+    NSMutableArray *allItems = [[NSMutableArray alloc] initWithArray:result];
+    if ([allItems count] > 0)
+        return (WCGCity*)[allItems objectAtIndex:0];
+    else return nil;
+    
+}
 
 @end

@@ -28,18 +28,24 @@
         points = 0;
         currentCityIndex = -1;
         progressBarTotalSeconds = 0;
-        
+        [[WCGWorldStore sharedStore] parseFullCountryInfo];
         
 
         // used for parsing cities and countries
+        [[WCGWorldStore sharedStore] showAllItems:@"WCGRegion"];
+
+        [[WCGWorldStore sharedStore] showAllItems:@"WCGCountry"];
+        [[WCGWorldStore sharedStore] parseFullCountryInfo];
+        [[WCGWorldStore sharedStore] saveChanges];
         /*
         [[WCGWorldStore sharedStore] addDefaultRegions];
         [[WCGWorldStore sharedStore] parseAllCountries];
         [[WCGWorldStore sharedStore] showAllItems:@"WCGRegion"];
         [[WCGWorldStore sharedStore] parseAllRegions];
         [[WCGWorldStore sharedStore] showAllItems:@"WCGCountry"];
-        [[WCGWorldStore sharedStore] parseAllCities];               
-        [[WCGWorldStore sharedStore] saveChanges];
+        [[WCGWorldStore sharedStore] parseAllCities];
+         [[WCGWorldStore sharedStore] parseFullCountryInfo];
+         [[WCGWorldStore sharedStore] saveChanges];
          */
         
     }
@@ -130,35 +136,7 @@
 
 
 
-//this checks if city exists - used for tests
-/*
--(void)checkCity
-{
-    NSString *curCityName = [cityName text];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGCity"];
-    [request setEntity:e];
-    
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"name == %@", curCityName];
-    [request setPredicate:pred];
-    
-    
-    NSError *error;
-    
-    NSArray *result = [context executeFetchRequest:request error:&error];
-    
-    if (!result)
-    {
-        [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
-    }
-    
-    NSMutableArray *allItems = [[NSMutableArray alloc] initWithArray:result];
-    for (WCGCity *city in allItems)
-    {
-        NSLog(@"city exists: %@, lat %@, lng %@, population %@", [city name], [city lat], [city lng], [city population]);
-    }
 
-}*/
 
 - (void)updateProgressBar
 {    
