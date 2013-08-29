@@ -24,7 +24,7 @@ struct zoom
     NSManagedObjectContext *context;
     NSManagedObjectModel *model;
     
-    NSMutableDictionary *allCountries;    
+       
     NSMutableArray * currentCities;
     
     NSMutableDictionary * countriesZooms;
@@ -32,12 +32,16 @@ struct zoom
 
 
 @property (nonatomic, strong) NSMutableDictionary *allRegions;
+@property (nonatomic, strong) NSMutableDictionary *allCountries; 
 
 //preparations
 - (void)showAllItems:(NSString*)tableName;
 - (NSMutableArray *)getCitiesWithParams:(NSMutableDictionary*)params;
 - (BOOL)saveChanges;
+
+//all countries and regions
 -(NSMutableArray *)getAllRegions;
+-(NSMutableArray *)getAllCountriesForRegion:(WCGRegion*)region;
 
 + (WCGWorldStore *) sharedStore;
 - (NSString *)itemArchivePath;

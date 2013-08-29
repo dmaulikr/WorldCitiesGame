@@ -10,7 +10,9 @@
 #import "WCGMapViewController.h"
 #import "WCGTextViewController.h"
 #import "WCGBuyViewController.h"
-#import "WCGCountriesViewController.h"
+#import "WCGRegionsViewController.h"
+#import "WCGSettingsViewController.h"
+#import "WCGSettings.h"
 
 @interface WCGStartViewController ()
 
@@ -18,11 +20,19 @@
 
 @implementation WCGStartViewController
 
++ (void)initialize
+{
+    NSDictionary *defaults = [NSDictionary
+                              dictionaryWithObject:@"Medium"
+                              forKey:[[WCGSettings sharedStore] level]];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        allItems = [[NSArray alloc] initWithObjects:@"Play", @"Get more cities", @"Rules", @"Author", nil];
+        allItems = [[NSArray alloc] initWithObjects:@"Play", @"Settings", @"Rules", @"Author", nil];
     }
     return self;
 }
@@ -68,7 +78,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if (curRow == 0) //play
     {
        // WCGMapViewController *currentViewController = [[WCGMapViewController alloc] init];
-        WCGCountriesViewController *currentViewController = [[WCGCountriesViewController alloc] init];
+        WCGRegionsViewController *currentViewController = [[WCGRegionsViewController alloc] init];
         
         
         [[self navigationController] pushViewController:currentViewController
@@ -77,7 +87,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     else if (curRow == 1) //buy
     {
-        
+        WCGSettingsViewController *textViewController = [[WCGSettingsViewController alloc] init];
+        [[self navigationController] pushViewController:textViewController
+                                               animated:YES];
+
     }
     else if (curRow == 2) //rules
     {

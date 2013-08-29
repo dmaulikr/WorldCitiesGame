@@ -12,6 +12,7 @@
 #import "WCGRegion.h"
 #include <math.h>
 #import "WCGWorldStore.h"
+#import "WCGSettings.h"
 
 @interface WCGMapViewController ()
 
@@ -80,22 +81,36 @@
     tapRecognizer.numberOfTapsRequired = 1;
     tapRecognizer.numberOfTouchesRequired = 1;
     CLLocationCoordinate2D centre;
-    int x, y;
+   // int x, y;
     
-    if ([gameType objectForKey:@"type"] && [[gameType objectForKey:@"type"] isEqualToString:@"region"])
+    if ([gameType objectForKey:@"type"])
     {
-        NSString *regionStr = [gameType objectForKey:@"details"];
-        centre = CLLocationCoordinate2DMake([[[allRegions objectForKey:regionStr] centreLat] intValue], [[[allRegions objectForKey:regionStr] centreLng] intValue]);
-        x = [[[allRegions objectForKey:regionStr] zoomX] intValue];
-        y = [[[allRegions objectForKey:regionStr] zoomY] intValue];
+        if ([[gameType objectForKey:@"type"] isEqualToString:@"region"]) //focus on the centre of the region
+        {
+            NSString *regionStr = [gameType objectForKey:@"details"];
+            allRegions = [[WCGWorldStore sharedStore] allRegions];
+            centre = CLLocationCoordinate2DMake([[[allRegions objectForKey:regionStr] centreLat] intValue], [[[allRegions objectForKey:regionStr] centreLng] intValue]);
+            currentZoomX = [[[allRegions objectForKey:regionStr] zoomX] intValue];
+            currentZoomY = [[[allRegions objectForKey:regionStr] zoomY] intValue];
+        }
+        else if ([[gameType objectForKey:@"type"] isEqualToString:@"country"]) //still focus on the centre of the region, may change the db later
+        {
+            NSString *countryStr = [gameType objectForKey:@"details"];
+            allCountries = [[WCGWorldStore sharedStore] allCountries];
+            WCGCountry * curCountry = [allCountries objectForKey:countryStr];
+            centre = CLLocationCoordinate2DMake([[[curCountry region] centreLat] intValue], [[[curCountry region] centreLng] intValue]);
+            currentZoomX = [[[curCountry region] zoomX] intValue];
+            currentZoomY = [[[curCountry region] zoomY] intValue];
+        }
+        
     }
     else
     {
         centre = [worldMap centerCoordinate];
-        x = y = 1000000;
+        currentZoomX = currentZoomY = 1000000;
     }
            
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(centre, 5000000, 5000000);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(centre, currentZoomX, currentZoomY);
     [worldMap setRegion:region animated:YES];
     
     desiredPointAnnotation = [[MKPointAnnotation alloc] init];
@@ -176,8 +191,9 @@
     
     currentCities = [[WCGWorldStore sharedStore] getCitiesWithParams:gameType];
     
-   
-        
+    gameLevel = [[NSUserDefaults standardUserDefaults]
+                       valueForKey:[[WCGSettings sharedStore] level]];  
+    
     [self nextQuestion];
     
 }
@@ -193,7 +209,11 @@
     }
     else
     {
-        [questionField setText:[NSString stringWithFormat:@"%d/%d %@", currentCityIndex + 1, numberOfQuestions, [[currentCities objectAtIndex:currentCityIndex] name]]];
+        NSString * text = [NSString stringWithFormat:@"%d/%d %@", currentCityIndex + 1, numberOfQuestions, [[currentCities objectAtIndex:currentCityIndex] name]];
+        WCGCountry * country = [[currentCities objectAtIndex:currentCityIndex] country];
+        if ([gameLevel isEqualToString:@"Medium"] || [gameLevel isEqualToString:@"Easy"])
+            text = [text stringByAppendingString:[NSString stringWithFormat:@", %@", [country name]]];
+        [questionField setText:text];
         [self setNewProgressBar:10.0];
         [worldMap addGestureRecognizer:tapRecognizer];
     } 
@@ -298,7 +318,7 @@
     [worldMap addAnnotation:desiredPointAnnotation];
     
     //center on desiredpoint
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([desiredLocation coordinate], 10000000, 10000000);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance([desiredLocation coordinate], currentZoomX, currentZoomY);
     [worldMap setRegion:region animated:YES];
 }
 

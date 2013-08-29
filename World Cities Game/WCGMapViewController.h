@@ -38,6 +38,11 @@
     
     NSMutableDictionary *gameType;
     
+    int currentZoomX, currentZoomY;
+    
+    int level;
+    
+    NSString * gameLevel;
 
 }
 

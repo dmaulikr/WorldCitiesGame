@@ -11,7 +11,7 @@
 
 @implementation WCGWorldStore
 
-@synthesize allRegions;
+@synthesize allRegions, allCountries;
 
 
 + (id)allocWithZone:(NSZone *)zone
@@ -50,6 +50,8 @@
         
         [context setUndoManager:nil];
         allRegions = [[NSMutableDictionary alloc] init];
+        allCountries = [[NSMutableDictionary alloc] init];
+
              
         //[self addRegion:@"Africa" code:@"AF"];
         //[self addRegion:@"Asia" code:@"AS"];
@@ -93,14 +95,26 @@
     
     [request setFetchLimit:numberOfCities*10];
     
-    if ([params objectForKey:@"type"] && [[params objectForKey:@"type"] isEqualToString:@"region"])
+    if ([params objectForKey:@"type"])
     {
-        WCGRegion *region = [[[WCGWorldStore sharedStore] allRegions] objectForKey:[params objectForKey:@"details"]];
-        if (region)
+        if ([[params objectForKey:@"type"] isEqualToString:@"region"])
         {
-            NSPredicate *pred = [NSPredicate predicateWithFormat:@"country.region == %@", region];
-            [request setPredicate:pred];
-        }        
+            WCGRegion *region = [[[WCGWorldStore sharedStore] allRegions] objectForKey:[params objectForKey:@"details"]];
+            if (region)
+            {
+                NSPredicate *pred = [NSPredicate predicateWithFormat:@"country.region == %@", region];
+                [request setPredicate:pred];
+            }
+        }
+        else if ([[params objectForKey:@"type"] isEqualToString:@"country"])
+        {
+            WCGCountry *country = [[[WCGWorldStore sharedStore] allCountries] objectForKey:[params objectForKey:@"details"]];
+            if (country)
+            {
+                NSPredicate *pred = [NSPredicate predicateWithFormat:@"country == %@", country];
+                [request setPredicate:pred];
+            }        
+        }            
     }
     
     NSError *error;
@@ -116,7 +130,7 @@
     int r;
     for (WCGCity *city in result)
     {
-        r = arc4random() % numberOfCities*10;
+        r = arc4random() % [result count];
         
         if (![currentCities containsObject:[result objectAtIndex:r]])
             [currentCities addObject:[result objectAtIndex:r]];
@@ -142,7 +156,7 @@
     NSError *error;
     NSString * resultString = [documentDirectory stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
     
-    /*
+    
     
      NSFileManager *fileManager = [NSFileManager defaultManager];
      BOOL success = [fileManager fileExistsAtPath:resultString];
@@ -157,7 +171,7 @@
          }
      }
      
-    */
+    
     
     return resultString;
 }
@@ -175,10 +189,13 @@
 }
 
 -(NSMutableArray *)getAllRegions
-{    
+{
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGRegion"];
     [request setEntity:e];
+    
+    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    [request setSortDescriptors:[NSArray arrayWithObject:sd]];
     
     NSError *error;
     
@@ -194,6 +211,40 @@
         for (WCGRegion * region in result)
         {
             [allRegions setValue:region forKey:[region code]];
+        }
+    }
+    return [[NSMutableArray alloc] initWithArray:result];
+}
+
+-(NSMutableArray *)getAllCountriesForRegion:(WCGRegion*)region
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *e = [[model entitiesByName] objectForKey:@"WCGCountry"];
+    [request setEntity:e];
+    
+    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    [request setSortDescriptors:[NSArray arrayWithObject:sd]];
+    
+    if (region)
+    {
+        NSPredicate * pred = [NSPredicate predicateWithFormat:@"code != 'ax' and region == %@", region];
+        [request setPredicate:pred];
+    }
+    
+    NSError *error;
+    
+    NSArray *result = [context executeFetchRequest:request error:&error];
+    
+    if (!result)
+    {
+        [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
+    }
+    
+    if ([allCountries count] == 0)
+    {
+        for (WCGCountry * country in result)
+        {
+            [allCountries setValue:country forKey:[country code]];
         }
     }
     return [[NSMutableArray alloc] initWithArray:result];
