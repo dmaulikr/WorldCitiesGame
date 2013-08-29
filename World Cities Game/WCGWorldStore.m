@@ -247,7 +247,7 @@
             [allCountries setValue:country forKey:[country code]];
         }
     }
-    return [[NSMutableArray alloc] initWithArray:result];
+    return result;
 }
 
 -(void)showAllItems:(NSString*)tableName
