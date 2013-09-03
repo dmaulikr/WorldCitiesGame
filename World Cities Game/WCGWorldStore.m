@@ -8,6 +8,7 @@
 
 #import "WCGWorldStore.h"
 #include <stdlib.h>
+#include "Flurry.h"
 
 @implementation WCGWorldStore
 
@@ -51,8 +52,8 @@
         [context setUndoManager:nil];
         allRegions = [[NSMutableDictionary alloc] init];
         allCountries = [[NSMutableDictionary alloc] init];
-
-             
+        [self getAllCountriesForRegion:nil];
+        
         //[self addRegion:@"Africa" code:@"AF"];
         //[self addRegion:@"Asia" code:@"AS"];
         //[self addRegion:@"Europe" code:@"EU"];
@@ -157,7 +158,7 @@
     NSString * resultString = [documentDirectory stringByAppendingPathComponent:@"store.wolrdcitiesgame"];
     
     
-    /*
+    
      NSFileManager *fileManager = [NSFileManager defaultManager];
      BOOL success = [fileManager fileExistsAtPath:resultString];
      
@@ -171,7 +172,7 @@
          }
      }
      
-    */
+    
     
     return resultString;
 }
@@ -240,6 +241,7 @@
         [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
     }
     
+    
     if ([allCountries count] == 0)
     {
         for (WCGCountry * country in result)
@@ -247,7 +249,10 @@
             [allCountries setValue:country forKey:[country code]];
         }
     }
-    return result;
+    
+    NSMutableArray * returnArr = [NSMutableArray arrayWithArray:result];
+     
+    return returnArr;
 }
 
 -(void)showAllItems:(NSString*)tableName
@@ -296,7 +301,7 @@
 
 // used for parsing cities and countries
 
- 
+
 -(void)setRegion:(WCGRegion*)region toCountry:(NSString*)countryCode
 {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -408,14 +413,14 @@
          
          
          
-         [self addCity:[citiesArr objectAtIndex:2] countyCode:[allCountries objectForKey:[[citiesArr objectAtIndex:8] lowercaseString]] population:populationNumber  lat:[citiesArr objectAtIndex:4] lng:[citiesArr objectAtIndex:5] isCapital:NO];
+         [self addCity:[citiesArr objectAtIndex:2] countyCode:[allCountries objectForKey:[[citiesArr objectAtIndex:8] lowercaseString]] population:[NSString stringWithFormat:@"%@", populationNumber]  lat:[citiesArr objectAtIndex:4] lng:[citiesArr objectAtIndex:5] isCapital:NO];
          
      }
      NSLog(@"Total count: %d", i);
  
  }
 
--setCountryCapital:(WCGCity *)city toCountry:(NSString*)countryCode lat:(NSString*)lat lng:(NSString*)lng
+-(void)setCountryCapital:(WCGCity *)city toCountry:(NSString*)countryCode lat:(NSString*)lat lng:(NSString*)lng
 {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     
@@ -435,14 +440,14 @@
         [NSException raise:@"fetch failed" format:@"reason: %@", [error localizedDescription]];
     }
     
-    currentCities = [[NSMutableArray alloc] initWithArray:result];
-    if ([currentCities count] > 0)
+    NSMutableArray * dict = [[NSMutableArray alloc] initWithArray:result];
+    if ([dict count] > 0)
     {
-        WCGCountry *newCountry = [currentCities objectAtIndex:0];
+        WCGCountry *newCountry = [dict objectAtIndex:0];
         [newCountry setCountryCapital:city lat:lat lng:lng];
         [self saveChanges];
     }
-
+    
     
 }
  
@@ -454,7 +459,7 @@
     {
         if ([line length] < 1 || [line characterAtIndex:0] == '#' || [line characterAtIndex:0] == ' ' || [line isEqualToString:@""]) continue;
         
-        NSArray *countriesArr = [line componentsSeparatedByString:@";"];
+        NSArray *countriesArr = [line componentsSeparatedByString:@"; "];
         if ([countriesArr count] < 10) continue;
         if ([[countriesArr objectAtIndex:35] intValue] != 1) continue;
         
@@ -499,6 +504,7 @@
    // NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"population" ascending:NO];
     //[request setSortDescriptors:[NSArray arrayWithObject:sd]];
     
+
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"name == %@", curCityName];
     [request setPredicate:pred];
     [request setFetchLimit:1];
@@ -516,8 +522,12 @@
     NSMutableArray *allItems = [[NSMutableArray alloc] initWithArray:result];
     if ([allItems count] > 0)
         return (WCGCity*)[allItems objectAtIndex:0];
-    else return nil;
-    
+    else
+    {
+        NSLog(@"%@", curCityName);
+        return nil;
+
+    }    
 }
 
 @end

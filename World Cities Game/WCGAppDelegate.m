@@ -9,6 +9,8 @@
 #import "WCGAppDelegate.h"
 #import "WCGMapViewController.h"
 #import "WCGStartViewController.h"
+#import "Countly.h"
+#import "Flurry.h"
 
 @implementation WCGAppDelegate
 
@@ -19,13 +21,26 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    WCGMapViewController *mvc = [[WCGMapViewController alloc] init];
+ 
+    //countly
+    [[Countly sharedInstance] start:@"3292a3cd95d03d16bfad04ca62b24f3ffb0e3002" withHost:@"https://cloud.count.ly"];
+    
+    //flurry
+    
+    [Flurry setCrashReportingEnabled:YES];
+    [Flurry setShowErrorInLogEnabled:YES];
+    [Flurry startSession:@"TV5X58RP4J8CRBW759MB"];
+    
+    NSUncaughtExceptionHandler * uncaughtExceptionHandler = nil;    
+    NSSetUncaughtExceptionHandler(uncaughtExceptionHandler);
+        
+  //  WCGMapViewController *mvc = [[WCGMapViewController alloc] init];
     
     WCGStartViewController *svc = [[WCGStartViewController alloc] init];
     
-    UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:mvc];
-    
+    UINavigationController * masterNav= [[UINavigationController alloc] initWithRootViewController:svc];
+    [Flurry logAllPageViews:masterNav];
+    masterNav.navigationBar.tintColor = [UIColor colorWithRed:0.191 green:0.188 blue:0.188 alpha:0.5];
     [[self window] setRootViewController:masterNav];    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -154,5 +169,17 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
+void uncaughtExceptionHandler(NSException *exception) {
+    NSArray *backtrace = [exception callStackSymbols];
+    NSString *platform = [[UIDevice currentDevice] model];
+    NSString *version = [[UIDevice currentDevice] systemVersion];
+    NSString *message = [NSString stringWithFormat:@"Device: %@. OS: %@. Exception: \n%@ \n Backtrace:\n%@",
+                         platform,
+                         version,
+                         exception,
+                         backtrace];
+    
+    [Flurry logError:@"Exception" message:message exception:exception];}
 
 @end
